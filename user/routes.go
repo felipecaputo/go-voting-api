@@ -31,6 +31,11 @@ func getUserFromRequest(w http.ResponseWriter, r *http.Request) (*User, error) {
 		return nil, err
 	}
 
+	if err := user.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return nil, err
+	}
+
 	return user, nil
 }
 
