@@ -24,7 +24,7 @@ func hashAndSaltPwd(password string) (string, error) {
 	return string(pwd), err
 }
 
-func (u *UserRepository) updateUser(user User, fields []string) error {
+func (u *UserRepository) updateUser(user User, fields ...string) error {
 	var updateFields = make([]string, len(fields))
 	for i, f := range fields {
 		updateFields[i] = fmt.Sprintf("%s=:%s", f, f)
@@ -64,7 +64,7 @@ func (u *UserRepository) Get(id string) (User, error) {
 }
 
 func (u *UserRepository) Update(user User) error {
-	return u.updateUser(user, []string{"name", "email"})
+	return u.updateUser(user, "name", "email")
 }
 
 func (u *UserRepository) Delete(id string) error {

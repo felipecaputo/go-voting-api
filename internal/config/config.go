@@ -18,6 +18,6 @@ func getConfigValue(envName string, defaultValue string) string {
 func NewConfig() *Config {
 	return &Config{
 		Environment:      getConfigValue("ENV", "local"),
-		ConnectionString: getConfigValue("CONN_STRING", "root:root@/votingdb"),
+		ConnectionString: getConfigValue("CONN_STRING", "root:root@tcp(localhost:3306)/votingdb"),
 	}
 }

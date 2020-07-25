@@ -16,7 +16,7 @@ type userHandler struct {
 	render     *render.Render
 }
 
-func NewUserHandler(db *sqlx.DB) *userHandler {
+func newUserHandler(db *sqlx.DB) *userHandler {
 	return &userHandler{
 		db:         db,
 		repository: UserRepository{db: *db},
@@ -94,7 +94,7 @@ func (u *userHandler) deleteUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func RegisterRoutes(db *sqlx.DB, router chi.Router) {
-	handler := NewUserHandler(db)
+	handler := newUserHandler(db)
 
 	router.Route("/user", func(r chi.Router) {
 		r.Get("/{id}", handler.getUser)

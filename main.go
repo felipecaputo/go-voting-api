@@ -14,12 +14,15 @@ import (
 func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
-	router.Use(middleware.RequestID)
 	router.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "healthy")
 	})
 
 	db, err := database.NewDB(config.NewConfig())
+
+	if err != nil {
+		panic(err)
+	}
 
 	user.RegisterRoutes(db, router)
 

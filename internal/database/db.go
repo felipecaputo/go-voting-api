@@ -6,7 +6,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func migrateUp(db *sqlx.DB) {
+func migrateUp(db *sqlx.DB) error {
 	_, err := db.Exec(`
 		CREATE TABLE IF NOT EXISTS user (
 			id varchar(40) NOT NULL,
@@ -22,18 +22,20 @@ func migrateUp(db *sqlx.DB) {
 		COLLATE=utf8mb4_0900_ai_ci;
 		`)
 
-	db.Exec("CREATE INDEX user_email_IDX USING BTREE ON user (email);")
-
-	if err != nil {
-		panic(err)
-	}
+	return err
 }
 
 func NewDB(config *config.Config) (*sqlx.DB, error) {
 	db, err := sqlx.Open("mysql", config.ConnectionString)
 
-	if err == nil && config.Environment == "local" {
-		migrateUp(db)
+	if err != nil {
+		return nil, err
+	}
+
+	if config.Environment == "local" {
+		if err = migrateUp(db); err != nil {
+			return nil, err
+		}
 	}
 
 	return db, err
